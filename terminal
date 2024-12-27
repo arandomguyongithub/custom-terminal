@@ -1,0 +1,52 @@
+import os
+from colorama import Fore, Style
+
+# Get the hostname of the current machine
+hostname = os.popen("hostname").read().strip()
+
+while True:
+    try:
+        # Display prompt with hostname
+        cmd = input(f"{hostname} ~ % ")
+
+        # Custom commands
+        if cmd == "theme -b":
+            print(Style.BRIGHT + "Set theme to bold")
+        elif cmd == "theme -d":
+            print(Style.DIM + "Set theme to dim")
+        elif cmd == "theme -r":
+            print(Style.NORMAL + "Reset theme")
+        elif cmd == "sslink":
+            print("Warning: Do not share this link with anyone!")
+            input("Press Enter to confirm... ")
+            confirm2 = input(
+                "Are you sure? Anyone who has this link can watch and control your computer (yes/no): "
+            )
+            if confirm2.lower() == "yes":
+                print(f"vnc://{hostname}/")
+            else:
+                print("Cancelled.")
+        elif cmd == "exit":
+            print("Exiting terminal...")
+            break
+        else:
+            # Execute the command safely
+            os.system(cmd)
+
+        # Check if the additional script exists
+        script_path = os.path.expanduser("~/Documents/terminal.py")
+        if os.path.isfile(script_path):
+            os.system(f"python3 {script_path}")
+        else:
+            print(
+                Fore.RED
+                + "You did an oopsie! You renamed the file. Name it back to terminal.py"
+                + Style.RESET_ALL
+            )
+
+    except KeyboardInterrupt:
+        print("\nSession terminated by user.")
+        break
+    except Exception as e:
+        print(Fore.RED + f"Error: {str(e)}" + Style.RESET_ALL)
+
