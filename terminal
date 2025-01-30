@@ -1,4 +1,5 @@
 import os
+import time
 from colorama import Fore, Style
 
 # Get the hostname of the current machine
@@ -14,8 +15,35 @@ while True:
             print(Style.BRIGHT + "Set theme to bold")
         elif cmd == "theme -d":
             print(Style.DIM + "Set theme to dim")
+        elif cmd == "restart":
+            atr = input("App name: ")
+            os.system("pkill " + atr)
+            time.sleep(1)
+            os.system("open -a " + atr)
         elif cmd == "theme -r":
             print(Style.NORMAL + "Reset theme")
+        elif cmd == "force -p":
+            fpa = input("Application name: ")
+            os.system("pkill -9 " + fpa)
+        elif cmd == "force -k":
+            fka = input("PID: ")
+            os.system("kill -9 " + fka)
+
+# admin ver
+        elif cmd == "suser force -p":
+            fpa = input("Application name: ")
+            os.system("sudo pkill -9 " + fpa)
+        elif cmd == "suser force -k":
+            fka = input("PID: ")
+            os.system("sudo kill -9 " + fka)
+
+
+
+
+
+
+
+        
         elif cmd == "sslink":
             print("Warning: Do not share this link with anyone!")
             input("Press Enter to confirm... ")
@@ -24,6 +52,14 @@ while True:
             )
             if confirm2.lower() == "yes":
                 print(f"vnc://{hostname}/")
+                opensslink = input("Open link? y/n")
+                if opensslink.lower() == "y":
+                    os.system(f"open vnc://{hostname}/")
+                    print(Fore.GREEN + "Opened link")
+                    print(Fore.RESET + "")
+                else:
+                    print(Fore.RED + "Cancelled.")
+                    print(Fore.RESET + "")
             else:
                 print("Cancelled.")
         elif cmd == "exit":
@@ -49,4 +85,6 @@ while True:
         break
     except Exception as e:
         print(Fore.RED + f"Error: {str(e)}" + Style.RESET_ALL)
+
+
 
